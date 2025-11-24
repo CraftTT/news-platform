@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json}\""
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.10.1",
@@ -23,6 +24,7 @@
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.0.3",
+    "prettier": "^3.3.3",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
