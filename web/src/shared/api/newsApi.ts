@@ -2,21 +2,28 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { PagedResponse } from '../types/news';
 
 const BASE_URL = 'https://newsapi.org/v2';
-const API_KEY = '15af6f9244e74986b4550ecb4bcad36e';
+
+const API_KEY = process.env.NEXT_PUBLIC_NEWS_API_KEY;
+
+if (!API_KEY) {
+  console.warn('NEXT_PUBLIC_NEWS_API_KEY is not set. News API requests will fail.');
+}
 
 export const newsApi = createApi({
   reducerPath: 'newsApi',
   baseQuery: fetchBaseQuery({
     baseUrl: BASE_URL,
     prepareHeaders: (headers) => {
-      headers.set('X-Api-Key', API_KEY);
+      if (API_KEY) {
+        headers.set('X-Api-Key', API_KEY);
+      }
       return headers;
     },
   }),
   endpoints: (builder) => ({
     getTopHeadlines: builder.query<
-      PagedResponse,
-      { page?: number; pageSize?: number; q?: string; category?: string; country?: string }
+        PagedResponse,
+        { page?: number; pageSize?: number; q?: string; category?: string; country?: string }
     >({
       query: ({ page = 1, pageSize = 20, q, category, country = 'us' }) => {
         const params = new URLSearchParams();
@@ -30,8 +37,15 @@ export const newsApi = createApi({
     }),
 
     getEverything: builder.query<
-      PagedResponse,
-      { page?: number; pageSize?: number; q?: string; from?: string; to?: string; sortBy?: 'publishedAt' | 'relevancy' | 'popularity' }
+        PagedResponse,
+        {
+          page?: number;
+          pageSize?: number;
+          q?: string;
+          from?: string;
+          to?: string;
+          sortBy?: 'publishedAt' | 'relevancy' | 'popularity';
+        }
     >({
       query: ({ page = 1, pageSize = 20, q, from, to, sortBy = 'publishedAt' }) => {
         const params = new URLSearchParams();
