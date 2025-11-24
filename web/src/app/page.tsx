@@ -102,7 +102,7 @@ export default function Home() {
               <p className="text-sm text-slate-500 mt-1">Актуальные новости со всего мира</p>
             </div>
             <Link href="/favorites" className="px-5 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all shadow-md hover:shadow-lg font-medium">
-              ⭐ Избранное
+              Избранное
             </Link>
           </div>
           
@@ -117,14 +117,14 @@ export default function Home() {
           <div className="flex gap-2 mb-3">
             <input
               type="text"
-              placeholder="📅 Дата начала (2024-01-01)"
+              placeholder="Дата начала (2024-01-01)"
               value={from}
               onChange={(e) => setFrom(e.target.value)}
               className="flex-1 px-4 py-3 border border-gray-300 rounded-lg text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <input
               type="text"
-              placeholder="📅 Дата окончания (2024-12-31)"
+              placeholder="Дата окончания (2024-12-31)"
               value={to}
               onChange={(e) => setTo(e.target.value)}
               className="flex-1 px-4 py-3 border border-gray-300 rounded-lg text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -140,7 +140,7 @@ export default function Home() {
                   : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
               }`}
             >
-              🌐 Все
+              Все
             </button>
             {CATEGORIES.map((cat) => (
               <button
@@ -187,7 +187,7 @@ export default function Home() {
                         : 'bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700'
                     }`}
                   >
-                    {isFavorite(article.url) ? '⭐ Сохранено' : '☆ Сохранить'}
+                    {isFavorite(article.url) ? 'Сохранено' : 'Сохранить'}
                   </button>
                 </div>
               ))}

@@ -10,19 +10,18 @@ import { initPushListeners, removePushListeners, requestPushPermissionAndToken }
 function Bootstrap() {
   useEffect(() => {
     store.dispatch(hydrateFavorites());
-    // Временно отключаем инициализацию пушей для отладки ошибки рантайма
-    // initPushListeners();
-    // (async () => {
-    //   const res = await requestPushPermissionAndToken();
-    //   if (res.granted && res.token) {
-    //     console.log('Expo push token:', res.token);
-    //   } else {
-    //     console.log('Push permission not granted');
-    //   }
-    // })();
+    initPushListeners();
+    (async () => {
+      const res = await requestPushPermissionAndToken();
+      if (res.granted && res.token) {
+        console.log('Expo push token:', res.token);
+      } else {
+        console.log('Push permission not granted');
+      }
+    })();
 
-    // return () => removePushListeners();
-    return () => {}
+    return () => removePushListeners();
+    // return () => {}
   }, []);
   return <RootNavigator />;
 }

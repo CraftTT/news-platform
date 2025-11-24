@@ -16,11 +16,11 @@ export default function FavoritesPage() {
         <div className="max-w-7xl mx-auto px-4 py-5">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-slate-800">⭐ Избранное</h1>
+              <h1 className="text-3xl font-bold text-slate-800">Избранное</h1>
               <p className="text-sm text-slate-500 mt-1">Ваши сохраненные статьи</p>
             </div>
             <Link href="/" className="px-5 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all shadow-md hover:shadow-lg font-medium">
-              📰 Новости
+              Новости
             </Link>
           </div>
         </div>
@@ -40,7 +40,7 @@ export default function FavoritesPage() {
                   onClick={() => dispatch(removeFavorite(article.url))}
                   className="absolute top-2 right-2 bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-2 rounded-lg hover:from-red-600 hover:to-red-700 text-sm font-medium shadow-md hover:shadow-lg transition-all"
                 >
-                  🗑️ Удалить
+                  Удалить
                 </button>
               </div>
             ))}
