@@ -20,6 +20,7 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '../../app/navigation/RootNavigator';
 
+// Доступные категории новостей
 const CATEGORIES = [
   'business',
   'entertainment',
@@ -32,19 +33,27 @@ const CATEGORIES = [
 
 type Nav = NativeStackNavigationProp<RootStackParamList, 'Tabs'>;
 
+/**
+ * Главный экран со списком новостей
+ * Поддерживает поиск, фильтрацию по категориям и датам, бесконечную прокрутку
+ */
 export default function NewsListScreen() {
   const navigation = useNavigation<Nav>();
+  
+  // Состояние фильтров
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [category, setCategory] = useState<string | null>(null);
-  const [from, setFrom] = useState<string | undefined>(undefined); // YYYY-MM-DD
-  const [to, setTo] = useState<string | undefined>(undefined); // YYYY-MM-DD
+  const [from, setFrom] = useState<string | undefined>(undefined);
+  const [to, setTo] = useState<string | undefined>(undefined);
 
+  // Состояние данных и пагинации
   const [page, setPage] = useState(1);
   const [articles, setArticles] = useState<Article[]>([]);
   const [totalResults, setTotalResults] = useState(0);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
+  // API хуки для загрузки новостей
   const [triggerTop, topState] = useLazyGetTopHeadlinesQuery();
   const [triggerEverything, everythingState] = useLazyGetEverythingQuery();
 
@@ -52,12 +61,13 @@ export default function NewsListScreen() {
   const isInitialLoading = isFetching && page === 1 && articles.length === 0;
   const hasMore = useMemo(() => articles.length < totalResults, [articles.length, totalResults]);
 
-  // Simple debounce for search
+  // Дебаунс для поиска - ждем 400мс после ввода перед запросом
   useEffect(() => {
     const t = setTimeout(() => setDebouncedSearch(search.trim()), 400);
     return () => clearTimeout(t);
   }, [search]);
 
+  // Формируем параметры запроса на основе текущих фильтров
   const buildParams = useCallback(
     (nextPage: number) => ({
       page: nextPage,
@@ -75,8 +85,12 @@ export default function NewsListScreen() {
       try {
         setErrorMsg(null);
         const params = buildParams(nextPage);
-        const useTop = !!params.category; // если есть категория — используем top-headlines
-        const result = useTop ? await triggerTop(params).unwrap() : await triggerEverything(params).unwrap();
+        // Используем top-headlines по умолчанию (не требует обязательных параметров)
+        // everything используем только если есть поисковый запрос или даты
+        const useEverything = !params.category && (params.q || params.from || params.to);
+        const result = useEverything 
+          ? await triggerEverything(params).unwrap() 
+          : await triggerTop(params).unwrap();
         setTotalResults(result.totalResults || 0);
         setArticles((prev) => (reset ? result.articles : [...prev, ...result.articles]));
         setPage(nextPage);
@@ -120,26 +134,29 @@ export default function NewsListScreen() {
     <View style={styles.container}>
       {/* Search */}
       <TextInput
-        placeholder="Поиск по заголовку/ключевым словам"
+        placeholder="🔍 Найти новости по ключевым словам..."
         value={search}
         onChangeText={setSearch}
         style={styles.input}
         autoCapitalize="none"
+        placeholderTextColor="#94a3b8"
       />
 
       {/* Date filters (YYYY-MM-DD) */}
       <View style={styles.filtersRow}>
         <TextInput
-          placeholder="from (YYYY-MM-DD)"
+          placeholder="📅 Дата начала (2024-01-01)"
           value={from || ''}
           onChangeText={(v) => setFrom(v || undefined)}
           style={[styles.input, styles.inputSmall]}
+          placeholderTextColor="#94a3b8"
         />
         <TextInput
-          placeholder="to (YYYY-MM-DD)"
+          placeholder="📅 Дата окончания (2024-12-31)"
           value={to || ''}
           onChangeText={(v) => setTo(v || undefined)}
           style={[styles.input, styles.inputSmall]}
+          placeholderTextColor="#94a3b8"
         />
       </View>
 

@@ -7,6 +7,9 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": false,
+    "extra": {
+      "NEWS_API_KEY": "15af6f9244e74986b4550ecb4bcad36e"
+    },
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
